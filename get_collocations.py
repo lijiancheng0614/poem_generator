@@ -5,12 +5,14 @@ import re
 import time
 import jieba
 import codecs
+import pickle
 import argparse
 
 TIME_FORMAT = '%Y-%m-%d %H:%M:%S'
 DATA_FOLDER = r'data'
 DEFAULT_FIN = os.path.join(DATA_FOLDER, 'poem.txt')
-DEFAULT_FOUT = os.path.join(DATA_FOLDER, 'collocations.txt')
+DEFAULT_FCOLLOCATIONS_V = os.path.join(DATA_FOLDER, 'collocations_v')
+DEFAULT_FCOLLOCATIONS_H = os.path.join(DATA_FOLDER, 'collocations_h')
 reg_sep = re.compile('([^\u4e00-\u9fa5]+)')
 
 class BigramCollocationFinder():
@@ -42,13 +44,14 @@ class BigramCollocationFinder():
 
 
 def read_data(fin):
-    finder = BigramCollocationFinder()
-    title_flag = 0
+    finder_v = BigramCollocationFinder()
+    finder_h = BigramCollocationFinder()
+    title_flag = False
     fd = codecs.open(fin, 'r', 'utf-8')
     for line in fd:
         line = line.strip()
-        title_flag = 1 - title_flag
-        if title_flag == 1:
+        title_flag = not title_flag
+        if title_flag:
             continue
         sentences = reg_sep.sub(' ', line).split()
         if len(sentences) % 2 > 0:
@@ -59,21 +62,38 @@ def read_data(fin):
                 continue
             for j in range(len(sentences[i])):
                 if len(sentences[i][j]) == len(sentences[i + 1][j]):
-                    finder.add_word_pair((sentences[i][j], sentences[i + 1][j]))
+                    finder_v.add_word_pair((sentences[i][j], sentences[i + 1][j]))
                 else:
                     break
+                if j + 1 < len(sentences[i]):
+                    finder_h.add_word_pair((sentences[i][j], sentences[i][j + 1]))
+                    finder_h.add_word_pair((sentences[i + 1][j], sentences[i + 1][j + 1]))
     fd.close()
     print('Read data done.')
-    return finder
+    return (finder_v, finder_h)
 
 
-def write_collocations(fout, finder):
+def get_collocations_from_finder(finder):
     measure = 'frequency'
     collocations = finder.score_bigram(measure)
     collocations = sorted(collocations, key=lambda x:x[1], reverse=True)
-    fw = codecs.open(fout, 'w', 'utf-8')
+    collocations_dict = dict()
     for (w1, w2), score in collocations:
-        fw.write('{} {} {} {}\n'.format(w1, w2, score, finder.bigram_fd[(w1, w2)]))
+        l = len(w2)
+        if w1 in collocations_dict:
+            if l in collocations_dict[w1]:
+                collocations_dict[w1][l].append((score, w2))
+            else:
+                collocations_dict[w1][l] = [(score, w2)]
+        else:
+            collocations_dict[w1] = {l : [(score, w2)]}
+    return collocations_dict
+    # return ['{} {} {} {}'.format(w1, w2, score, finder.bigram_fd[(w1, w2)])\
+    #     for (w1, w2), score in collocations]
+
+def write_collocations(fout, collocations):
+    fw = codecs.open(fout, 'wb')
+    pickle.dump(collocations, fw)
     fw.close()
     print('Write collocations done.')
 
@@ -82,8 +102,10 @@ def set_arguments():
     parser = argparse.ArgumentParser(description='Get collocations')
     parser.add_argument('--fin', type=str, default=DEFAULT_FIN,
                         help='Input file path, default is {}'.format(DEFAULT_FIN))
-    parser.add_argument('--fout', type=str, default=DEFAULT_FOUT,
-                        help='Output file path, default is {}'.format(DEFAULT_FOUT))
+    parser.add_argument('--fcollocations_v', type=str, default=DEFAULT_FCOLLOCATIONS_V,
+                        help='Output collocations_v file path, default is {}'.format(DEFAULT_FCOLLOCATIONS_V))
+    parser.add_argument('--fcollocations_h', type=str, default=DEFAULT_FCOLLOCATIONS_H,
+                        help='Output collocations_h file path, default is {}'.format(DEFAULT_FCOLLOCATIONS_H))
     return parser
 
 
@@ -93,7 +115,10 @@ if __name__ == '__main__':
 
     print('{} START'.format(time.strftime(TIME_FORMAT)))
 
-    finder = read_data(cmd_args.fin)
-    write_collocations(cmd_args.fout, finder)
+    (finder_v, finder_h) = read_data(cmd_args.fin)
+    collocations_v = get_collocations_from_finder(finder_v)
+    collocations_h = get_collocations_from_finder(finder_h)
+    write_collocations(cmd_args.fcollocations_v, collocations_v)
+    write_collocations(cmd_args.fcollocations_h, collocations_h)
 
     print('{} STOP'.format(time.strftime(TIME_FORMAT)))

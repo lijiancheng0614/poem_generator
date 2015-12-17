@@ -10,9 +10,9 @@ TIME_FORMAT = '%Y-%m-%d %H:%M:%S'
 DATA_FOLDER = r'data'
 DEFAULT_FIN = os.path.join(DATA_FOLDER, '唐诗语料库.txt')
 DEFAULT_FOUT = os.path.join(DATA_FOLDER, 'poem.txt')
-reg_noisy = re.compile('(<[^\u4e00-\u9fa5]*>)')
-reg_note = re.compile('(（.*)')
-reg_note2 = re.compile('(.*）)')
+reg_noisy = re.compile('[^\u3000-\uffee]')
+reg_note = re.compile('(（.*）)') # Cannot deal with （） in seperate lines
+# 中文及全角标点符号(字符)是\u3000-\u301e\ufe10-\ufe19\ufe30-\ufe44\ufe50-\ufe6b\uff01-\uffee
 
 def set_arguments():
     parser = argparse.ArgumentParser(description='Pre process')
@@ -35,7 +35,7 @@ if __name__ == '__main__':
     start_flag = False
     for line in fd:
         line = line.strip()
-        if not line or '《全唐诗》' in line or '<http'  in line:
+        if not line or '《全唐诗》' in line or '<http'  in line or '□' in line:
             continue
         elif '〖' in line and '〗' in line:
             if start_flag:
@@ -50,6 +50,7 @@ if __name__ == '__main__':
                 print(line)
         else:
             line = reg_noisy.sub('', line)
+            line = reg_note.sub('', line)
             line = line.replace(' .', '')
             fw.write(line)
 

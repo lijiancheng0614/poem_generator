@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>古诗生成器</title>
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" >
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Poem Generator">
+    <meta name="author" content="Jiancheng Li" charset="utf-8">
+    <!-- <link rel="shortcut icon" href="favicon.ico" type="image/x-icon"/> -->
+    <!-- 新 Bootstrap 核心 CSS 文件 -->
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+    <script src="http://cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+    <script src="http://cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <style type="text/css">
+        #main {
+            max-width: 360px;
+            margin: 0 auto;
+        }
+    </style>
+    <script type="text/javascript">
+        function resetPoem() {
+            document.getElementsByName('poem_1')[0].setAttribute("value", "");
+            document.getElementsByName('poem_2')[0].setAttribute("value", "");
+            document.getElementsByName('poem_3')[0].setAttribute("value", "");
+            document.getElementsByName('poem_4')[0].setAttribute("value", "");
+        }
+    </script>
+</head>
+<body>
+    <div class="container" id="main">
+        <h1>古诗生成器</h1>
+        <hr/>
+        <p>暂时只能生成4句尽可能搭配较合理、主题较明确的唐诗，且不考虑平仄等情况。</p>
+        <hr/>
+        <form action="" method="post">
+            <input value="{{ poem_1 }}" name="poem_1" class="form-control" type="text">
+            <br/>
+            <input value="{{ poem_2 }}" name="poem_2" class="form-control" type="text">
+            <br/>
+            <input value="{{ poem_3 }}" name="poem_3" class="form-control" type="text">
+            <br/>
+            <input value="{{ poem_4 }}" name="poem_4" class="form-control" type="text">
+            <br/>
+            <button class="btn btn-primary" type="submit">生成</button>
+            <button class="btn btn-warning" type="reset" onclick="resetPoem()">清空</button>
+        </form>
+    </div>
+</body>
+</html>
