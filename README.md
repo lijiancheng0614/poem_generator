@@ -7,6 +7,7 @@ Generate Chinese poem automatically.
 * Python 3.0+
 * Flask
 * jieba
+* sklearn
 
 ## Usage
 
