@@ -9,7 +9,7 @@ import pickle
 import argparse
 
 TIME_FORMAT = '%Y-%m-%d %H:%M:%S'
-BASE_FOLDER = os.path.abspath(os.path.dirname(__file__))
+BASE_FOLDER = os.path.abspath(os.path.dirname(__file__)).decode('gb2312')
 DATA_FOLDER = os.path.join(BASE_FOLDER, 'data')
 DEFAULT_FIN = os.path.join(DATA_FOLDER, 'poem.txt')
 DEFAULT_FOUT = os.path.join(DATA_FOLDER, 'start_words.txt')
@@ -41,10 +41,10 @@ def write_start_words(fout, start_words):
 
 def set_arguments():
     parser = argparse.ArgumentParser(description='Get topics')
-    parser.add_argument('--fin', type=str, default=DEFAULT_FIN,
-                        help='Input file path, default is {}'.format(DEFAULT_FIN))
-    parser.add_argument('--fout', type=str, default=DEFAULT_FOUT,
-                        help='Output start_words file path, default is {}'.format(DEFAULT_FOUT))
+    parser.add_argument('--fin', type=unicode, default=DEFAULT_FIN,
+                        help=u'Input file path, default is {}'.format(DEFAULT_FIN))
+    parser.add_argument('--fout', type=unicode, default=DEFAULT_FOUT,
+                        help=u'Output start_words file path, default is {}'.format(DEFAULT_FOUT))
     return parser
 
 

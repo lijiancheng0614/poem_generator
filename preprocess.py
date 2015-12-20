@@ -7,20 +7,20 @@ import codecs
 import argparse
 
 TIME_FORMAT = '%Y-%m-%d %H:%M:%S'
-BASE_FOLDER = os.path.abspath(os.path.dirname(__file__))
+BASE_FOLDER = os.path.abspath(os.path.dirname(__file__)).decode('gb2312')
 DATA_FOLDER = os.path.join(BASE_FOLDER, 'data')
-DEFAULT_FIN = os.path.join(DATA_FOLDER, '唐诗语料库.txt')
+DEFAULT_FIN = os.path.join(DATA_FOLDER, u'唐诗语料库.txt')
 DEFAULT_FOUT = os.path.join(DATA_FOLDER, 'poem.txt')
-reg_noisy = re.compile('[^\u3000-\uffee]')
-reg_note = re.compile('(（.*）)') # Cannot deal with （） in seperate lines
+reg_noisy = re.compile(u'[^\u3000-\uffee]')
+reg_note = re.compile(u'(（.*）)') # Cannot deal with （） in seperate lines
 # 中文及全角标点符号(字符)是\u3000-\u301e\ufe10-\ufe19\ufe30-\ufe44\ufe50-\ufe6b\uff01-\uffee
 
 def set_arguments():
     parser = argparse.ArgumentParser(description='Pre process')
-    parser.add_argument('--fin', type=str, default=DEFAULT_FIN,
-                        help='Input file path, default is {}'.format(DEFAULT_FIN))
-    parser.add_argument('--fout', type=str, default=DEFAULT_FOUT,
-                        help='Output file path, default is {}'.format(DEFAULT_FOUT))
+    parser.add_argument('--fin', type=unicode, default=DEFAULT_FIN,
+                        help=u'Input file path, default is {}'.format(DEFAULT_FIN))
+    parser.add_argument('--fout', type=unicode, default=DEFAULT_FOUT,
+                        help=u'Output file path, default is {}'.format(DEFAULT_FOUT))
     return parser
 
 
@@ -32,13 +32,13 @@ if __name__ == '__main__':
 
     fd = codecs.open(cmd_args.fin, 'r', 'utf-8')
     fw = codecs.open(cmd_args.fout, 'w', 'utf-8')
-    reg = re.compile('〖(.*)〗')
+    reg = re.compile(u'〖(.*)〗')
     start_flag = False
     for line in fd:
         line = line.strip()
-        if not line or '《全唐诗》' in line or '<http'  in line or '□' in line:
+        if not line or u'《全唐诗》' in line or '<http'  in line or u'□' in line:
             continue
-        elif '〖' in line and '〗' in line:
+        elif u'〖' in line and u'〗' in line:
             if start_flag:
                 fw.write('\n')
             start_flag = True

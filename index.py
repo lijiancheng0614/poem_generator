@@ -10,7 +10,7 @@ import argparse
 import generate_poem
 
 TIME_FORMAT = '%Y-%m-%d %H:%M:%S'
-BASE_FOLDER = os.path.abspath(os.path.dirname(__file__))
+BASE_FOLDER = os.path.abspath(os.path.dirname(__file__)).decode('gb2312')
 DATA_FOLDER = os.path.join(BASE_FOLDER, 'data')
 DEFAULT_FCOLLOCATIONS_V = os.path.join(DATA_FOLDER, 'collocations_v')
 DEFAULT_FCOLLOCATIONS_H = os.path.join(DATA_FOLDER, 'collocations_h')
@@ -49,7 +49,8 @@ def index():
                 topic_id = random.randint(0, 10) #TODO
                 given_poem = [poem_1, poem_2, poem_3, poem_4]
                 sentence_len = len(given_poem[0])
-                while True:
+                flag = False
+                for tried_count in range(3):
                     poem = generate_poem.generate_poem_with_poem4(given_poem,\
                         collocations_v, collocations_h, words, topic_words[topic_id], start_words)
                     print(poem)
@@ -60,14 +61,17 @@ def index():
                             break
                     if flag:
                         break
+                if not flag:
+                    poem = [u'系统暂无法生成', u'请您稍候再尝试', u'或是帮忙改进吧', u'感谢您的使用啦']
             else:
                 topic_id = random.randint(0, 10)
                 sentence_len = 7
                 start_word = random.choice(start_words)
                 print(start_word)
-                while True:
+                flag = False
+                for tried_count in range(3):
                     poem = generate_poem.generate_poem(topic_id, sentence_len, sentences_count, start_word,\
-                    collocations_v, collocations_h, words, topic_words[topic_id], start_words)
+                        collocations_v, collocations_h, words, topic_words[topic_id], start_words)
                     print(poem)
                     flag = True
                     for i in range(4):
@@ -76,6 +80,8 @@ def index():
                             break
                     if flag:
                         break
+                if not flag:
+                    poem = [u'系统暂无法生成', u'请您稍候再尝试', u'或是帮忙改进吧', u'感谢您的使用啦']
         except Exception as e:
             print(e)
         return render_template('index.htm',

@@ -9,12 +9,12 @@ import pickle
 import argparse
 
 TIME_FORMAT = '%Y-%m-%d %H:%M:%S'
-BASE_FOLDER = os.path.abspath(os.path.dirname(__file__))
+BASE_FOLDER = os.path.abspath(os.path.dirname(__file__)).decode('gb2312')
 DATA_FOLDER = os.path.join(BASE_FOLDER, 'data')
 DEFAULT_FIN = os.path.join(DATA_FOLDER, 'poem.txt')
 DEFAULT_FCOLLOCATIONS_V = os.path.join(DATA_FOLDER, 'collocations_v')
 DEFAULT_FCOLLOCATIONS_H = os.path.join(DATA_FOLDER, 'collocations_h')
-reg_sep = re.compile('([^\u4e00-\u9fa5]+)')
+reg_sep = re.compile(u'([^\u4e00-\u9fa5]+)')
 
 class BigramCollocationFinder():
     def __init__(self):
@@ -30,7 +30,7 @@ class BigramCollocationFinder():
         score = []
         if measure == 'frequency':
             for word_pair in self.bigram_fd:
-                score.append((word_pair, self.bigram_fd[word_pair] / self.N))
+                score.append((word_pair, float(self.bigram_fd[word_pair]) / self.N))
         # elif measure == 'Pearson\'s chi-square':
         #     for word_pair in self.bigram_fd:
         #         O11 = self.bigram_fd[word_pair]
@@ -101,12 +101,12 @@ def write_collocations(fout, collocations):
 
 def set_arguments():
     parser = argparse.ArgumentParser(description='Get collocations')
-    parser.add_argument('--fin', type=str, default=DEFAULT_FIN,
-                        help='Input file path, default is {}'.format(DEFAULT_FIN))
-    parser.add_argument('--fcollocations_v', type=str, default=DEFAULT_FCOLLOCATIONS_V,
-                        help='Output collocations_v file path, default is {}'.format(DEFAULT_FCOLLOCATIONS_V))
-    parser.add_argument('--fcollocations_h', type=str, default=DEFAULT_FCOLLOCATIONS_H,
-                        help='Output collocations_h file path, default is {}'.format(DEFAULT_FCOLLOCATIONS_H))
+    parser.add_argument('--fin', type=unicode, default=DEFAULT_FIN,
+                        help=u'Input file path, default is {}'.format(DEFAULT_FIN))
+    parser.add_argument('--fcollocations_v', type=unicode, default=DEFAULT_FCOLLOCATIONS_V,
+                        help=u'Output collocations_v file path, default is {}'.format(DEFAULT_FCOLLOCATIONS_V))
+    parser.add_argument('--fcollocations_h', type=unicode, default=DEFAULT_FCOLLOCATIONS_H,
+                        help=u'Output collocations_h file path, default is {}'.format(DEFAULT_FCOLLOCATIONS_H))
     return parser
 
 

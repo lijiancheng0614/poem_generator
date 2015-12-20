@@ -10,7 +10,7 @@ import random
 import argparse
 
 TIME_FORMAT = '%Y-%m-%d %H:%M:%S'
-BASE_FOLDER = os.path.abspath(os.path.dirname(__file__))
+BASE_FOLDER = os.path.abspath(os.path.dirname(__file__)).decode('gb2312')
 DATA_FOLDER = os.path.join(BASE_FOLDER, 'data')
 DEFAULT_FCOLLOCATIONS_V = os.path.join(DATA_FOLDER, 'collocations_v')
 DEFAULT_FCOLLOCATIONS_H = os.path.join(DATA_FOLDER, 'collocations_h')
@@ -23,7 +23,7 @@ def read_dump(fin):
     fd = codecs.open(fin, 'rb')
     data = pickle.load(fd)
     fd.close()
-    print('Read from {} done.'.format(fin))
+    print(u'Read from {} done.'.format(fin))
     return data
 
 
@@ -31,7 +31,7 @@ def read_txt(fin):
     fd = codecs.open(fin, 'r', 'utf-8')
     data = [i.strip() for i in fd]
     fd.close()
-    print('Read from {} done.'.format(fin))
+    print(u'Read from {} done.'.format(fin))
     return data
 
 
@@ -220,16 +220,16 @@ def generate_poem_with_poem4(poem, collocations_v, collocations_h, words, topic_
 
 def set_arguments():
     parser = argparse.ArgumentParser(description='Generate poem')
-    parser.add_argument('--fcollocations_v', type=str, default=DEFAULT_FCOLLOCATIONS_V,
-                        help='Collocations_v file path, default is {}'.format(DEFAULT_FCOLLOCATIONS_V))
-    parser.add_argument('--fcollocations_h', type=str, default=DEFAULT_FCOLLOCATIONS_H,
-                        help='Collocations_h file path, default is {}'.format(DEFAULT_FCOLLOCATIONS_H))
-    parser.add_argument('--fwords', type=str, default=DEFAULT_FWORDS,
-                        help='Words file path, default is {}'.format(DEFAULT_FWORDS))
-    parser.add_argument('--ftopic_words', type=str, default=DEFAULT_FTOPIC_WORDS,
-                        help='Topic_words file path, default is {}'.format(DEFAULT_FTOPIC_WORDS))
-    parser.add_argument('--fstart_words', type=str, default=DEFAULT_FSTART_WORDS,
-                        help='Start_words file path, default is {}'.format(DEFAULT_FSTART_WORDS))
+    parser.add_argument('--fcollocations_v', type=unicode, default=DEFAULT_FCOLLOCATIONS_V,
+                        help=u'Collocations_v file path, default is {}'.format(DEFAULT_FCOLLOCATIONS_V))
+    parser.add_argument('--fcollocations_h', type=unicode, default=DEFAULT_FCOLLOCATIONS_H,
+                        help=u'Collocations_h file path, default is {}'.format(DEFAULT_FCOLLOCATIONS_H))
+    parser.add_argument('--fwords', type=unicode, default=DEFAULT_FWORDS,
+                        help=u'Words file path, default is {}'.format(DEFAULT_FWORDS))
+    parser.add_argument('--ftopic_words', type=unicode, default=DEFAULT_FTOPIC_WORDS,
+                        help=u'Topic_words file path, default is {}'.format(DEFAULT_FTOPIC_WORDS))
+    parser.add_argument('--fstart_words', type=unicode, default=DEFAULT_FSTART_WORDS,
+                        help=u'Start_words file path, default is {}'.format(DEFAULT_FSTART_WORDS))
     return parser
 
 

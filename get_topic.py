@@ -12,7 +12,7 @@ from sklearn.feature_extraction.text import TfidfTransformer
 from sklearn import decomposition
 
 TIME_FORMAT = '%Y-%m-%d %H:%M:%S'
-BASE_FOLDER = os.path.abspath(os.path.dirname(__file__))
+BASE_FOLDER = os.path.abspath(os.path.dirname(__file__)).decode('gb2312')
 DATA_FOLDER = os.path.join(BASE_FOLDER, 'data')
 DEFAULT_FIN = os.path.join(DATA_FOLDER, 'poem.txt')
 DEFAULT_FTOPICS = os.path.join(DATA_FOLDER, 'topics.txt')
@@ -20,7 +20,7 @@ DEFAULT_FWORDS = os.path.join(DATA_FOLDER, 'words')
 DEFAULT_FTOPIC_WORDS = os.path.join(DATA_FOLDER, 'topic_words')
 DEFAULT_N_TOPIC = 10
 DEFAULT_N_TOPIC_WORDS = 20
-reg_sep = re.compile('([^\u4e00-\u9fa5]+)')
+reg_sep = re.compile(u'([^\u4e00-\u9fa5]+)')
 
 n_topic = 10
 n_topic_words = 20
@@ -68,14 +68,14 @@ def write_topics(ftopics, fwords, ftopics_words, poem_words, n_topic, n_topic_wo
 
 def set_arguments():
     parser = argparse.ArgumentParser(description='Get topics')
-    parser.add_argument('--fin', type=str, default=DEFAULT_FIN,
-                        help='Input file path, default is {}'.format(DEFAULT_FIN))
-    parser.add_argument('--ftopics', type=str, default=DEFAULT_FTOPICS,
-                        help='Output topics file path, default is {}'.format(DEFAULT_FTOPICS))
-    parser.add_argument('--ftopics_words', type=str, default=DEFAULT_FTOPIC_WORDS,
-                        help='Output topic_words file path, default is {}'.format(DEFAULT_FTOPIC_WORDS))
-    parser.add_argument('--fwords', type=str, default=DEFAULT_FWORDS,
-                        help='Output words file path, default is {}'.format(DEFAULT_FWORDS))
+    parser.add_argument('--fin', type=unicode, default=DEFAULT_FIN,
+                        help=u'Input file path, default is {}'.format(DEFAULT_FIN))
+    parser.add_argument('--ftopics', type=unicode, default=DEFAULT_FTOPICS,
+                        help=u'Output topics file path, default is {}'.format(DEFAULT_FTOPICS))
+    parser.add_argument('--ftopics_words', type=unicode, default=DEFAULT_FTOPIC_WORDS,
+                        help=u'Output topic_words file path, default is {}'.format(DEFAULT_FTOPIC_WORDS))
+    parser.add_argument('--fwords', type=unicode, default=DEFAULT_FWORDS,
+                        help=u'Output words file path, default is {}'.format(DEFAULT_FWORDS))
     parser.add_argument('--n_topic', type=int, default=DEFAULT_N_TOPIC,
                         help='Topics count, default is {}'.format(DEFAULT_N_TOPIC))
     parser.add_argument('--n_topic_words', type=int, default=DEFAULT_N_TOPIC_WORDS,
