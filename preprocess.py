@@ -7,7 +7,8 @@ import codecs
 import argparse
 
 TIME_FORMAT = '%Y-%m-%d %H:%M:%S'
-DATA_FOLDER = r'data'
+BASE_FOLDER = os.path.abspath(os.path.dirname(__file__))
+DATA_FOLDER = os.path.join(BASE_FOLDER, 'data')
 DEFAULT_FIN = os.path.join(DATA_FOLDER, '唐诗语料库.txt')
 DEFAULT_FOUT = os.path.join(DATA_FOLDER, 'poem.txt')
 reg_noisy = re.compile('[^\u3000-\uffee]')

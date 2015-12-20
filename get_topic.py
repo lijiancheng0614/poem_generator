@@ -12,7 +12,8 @@ from sklearn.feature_extraction.text import TfidfTransformer
 from sklearn import decomposition
 
 TIME_FORMAT = '%Y-%m-%d %H:%M:%S'
-DATA_FOLDER = r'data'
+BASE_FOLDER = os.path.abspath(os.path.dirname(__file__))
+DATA_FOLDER = os.path.join(BASE_FOLDER, 'data')
 DEFAULT_FIN = os.path.join(DATA_FOLDER, 'poem.txt')
 DEFAULT_FTOPICS = os.path.join(DATA_FOLDER, 'topics.txt')
 DEFAULT_FWORDS = os.path.join(DATA_FOLDER, 'words')

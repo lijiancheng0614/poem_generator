@@ -10,7 +10,8 @@ import random
 import argparse
 
 TIME_FORMAT = '%Y-%m-%d %H:%M:%S'
-DATA_FOLDER = r'data'
+BASE_FOLDER = os.path.abspath(os.path.dirname(__file__))
+DATA_FOLDER = os.path.join(BASE_FOLDER, 'data')
 DEFAULT_FCOLLOCATIONS_V = os.path.join(DATA_FOLDER, 'collocations_v')
 DEFAULT_FCOLLOCATIONS_H = os.path.join(DATA_FOLDER, 'collocations_h')
 DEFAULT_FWORDS = os.path.join(DATA_FOLDER, 'words')
